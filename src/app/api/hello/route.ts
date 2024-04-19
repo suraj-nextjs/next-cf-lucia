@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { db } from "@/drizzle/client";
 
@@ -21,10 +21,10 @@ export async function GET(request: NextRequest) {
   // const suffix = await myKv.get('suffix')
   // responseText += suffix
 
-  // return new Response(
-  //   users.length > 0 ? JSON.stringify(users) : responseText,
-  //   {}
-  // );
+  return new Response(
+    users.length > 0 ? JSON.stringify(users) : responseText,
+    {}
+  );
 
-  return NextResponse.json({ users });
+  // return NextResponse.json({ users });
 }
