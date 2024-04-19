@@ -1,8 +1,7 @@
 import { LibSQLDatabase, drizzle } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
-import * as schema from "./schema";
 
-let dbInstance: LibSQLDatabase<typeof schema> | undefined;
+let dbInstance: LibSQLDatabase | undefined;
 
 export const getDb = (DATABASE_URL: string, DATABASE_AUTH_TOKEN: string) => {
   if (dbInstance) {
@@ -13,6 +12,6 @@ export const getDb = (DATABASE_URL: string, DATABASE_AUTH_TOKEN: string) => {
     authToken: DATABASE_AUTH_TOKEN,
   });
 
-  dbInstance = drizzle(client, { schema });
+  dbInstance = drizzle(client);
   return dbInstance;
 };
