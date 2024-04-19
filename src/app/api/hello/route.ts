@@ -1,11 +1,16 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { getRequestContext } from "@cloudflare/next-on-pages";
-import { db } from "@/drizzle/client";
+import { getDb } from "@/drizzle/client";
 
 export const runtime = "edge";
 
 export async function GET(request: NextRequest) {
   let responseText = "Hello World";
+
+  const db = getDb(
+    getRequestContext().env.DATABASE_URL,
+    getRequestContext().env.DATABASE_AUTH_TOKEN
+  );
 
   const users = await db.query.users.findMany();
 
@@ -21,10 +26,10 @@ export async function GET(request: NextRequest) {
   // const suffix = await myKv.get('suffix')
   // responseText += suffix
 
-  return new Response(
-    users.length > 0 ? JSON.stringify(users) : responseText,
-    {}
-  );
+  // return new Response(
+  //   users.length > 0 ? JSON.stringify(users) : responseText,
+  //   {}
+  // );
 
-  // return NextResponse.json({ users });
+  return NextResponse.json({ users });
 }
