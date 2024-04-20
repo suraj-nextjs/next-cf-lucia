@@ -27,6 +27,11 @@ export const getLucia = (DATABASE_URL: string, DATABASE_AUTH_TOKEN: string) => {
         secure: process.env.NODE_ENV === "production",
       },
     },
+    getUserAttributes: (attributes) => {
+      return {
+        username: attributes.username,
+      };
+    },
   });
 
   return lucia;
@@ -79,4 +84,6 @@ declare module "lucia" {
     Lucia: typeof lucia;
     DatabaseUserAttributes: Omit<typeof user, "id">;
   }
+
+  interface User extends Omit<typeof user, "id"> {}
 }

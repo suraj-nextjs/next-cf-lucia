@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { LoginSchema } from "@/schemas";
+import { pbkdf2Verify } from "@/webcrypto-hash";
 import * as z from "zod";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
@@ -35,15 +36,13 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     await db.select().from(userTable).where(eq(userTable.username, username))
   )?.[0];
 
-  console.log(existingUser);
-
   if (!existingUser) {
     return {
       error: "Incorrect username or password",
     };
   }
 
-  const validPassword = password === existingUser.password;
+  const validPassword = pbkdf2Verify(existingUser.password, password);
 
   if (!validPassword) {
     return {
@@ -53,10 +52,10 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 
   const session = await lucia.createSession(existingUser.id, {});
   const sessionCookie = lucia.createSessionCookie(session.id);
-  // cookies().set(
-  //   sessionCookie.name,
-  //   sessionCookie.value,
-  //   sessionCookie.attributes
-  // );
-  return redirect("/");
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+  return redirect("/auth/profile");
 };
