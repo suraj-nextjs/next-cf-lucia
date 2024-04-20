@@ -1,27 +1,3 @@
-// import { getLucia, validateRequest } from "../auth";
-// import { Form } from "./signup/form";
-// import { redirect } from "next/navigation";
-// import { cookies } from "next/headers";
-
-// import type { ActionResult } from "./signup/form";
-// import { getRequestContext } from "@cloudflare/next-on-pages";
-// import { LOGIN_PATH } from "@/routes";
-// import { LogoutButton } from "@/components/auth/log-out-button";
-
-// export default async function Page() {
-//   const { user } = await validateRequest();
-//   if (!user) {
-//     return redirect(LOGIN_PATH);
-//   }
-//   return (
-//     <>
-//       <h1>Hi, {user?.id}!</h1>
-//       <p>Your user ID is {user.username}.</p>
-//       <LogoutButton>Sign out</LogoutButton>
-//     </>
-//   );
-// }
-
 import { Poppins } from "next/font/google";
 
 import { cn } from "@/lib/utils";

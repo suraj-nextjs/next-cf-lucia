@@ -33,7 +33,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   );
 
   const existingUser = (
-    await db.select().from(userTable).where(eq(userTable.username, email))
+    await db.select().from(userTable).where(eq(userTable.email, email))
   )?.[0];
 
   const userId = generateId(15);
@@ -44,7 +44,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   try {
     await db.insert(userTable).values({
       id: userId,
-      username: email,
+      email,
       password: hashedPassword,
     });
 
@@ -58,7 +58,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   } catch (e) {
     // if (e instanceof SqliteError && e.code === "SQLITE_CONSTRAINT_UNIQUE") {
     //   return {
-    //     error: "Username already used",
+    //     error: "email already used",
     //   };
     // }
     console.log(e);

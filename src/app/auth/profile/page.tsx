@@ -27,7 +27,7 @@ export default async function Profile() {
           <CardDescription>Profile Details</CardDescription>
         </CardHeader>
         <CardContent>
-          <h1>Hi, {user?.username}!</h1>
+          <h1>Hi, {user?.email}!</h1>
           <p>Your user ID is {user.id}.</p>
         </CardContent>
         <CardFooter>

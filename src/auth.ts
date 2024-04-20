@@ -6,6 +6,7 @@ import { sessionTable, user, userTable } from "./drizzle/schema";
 import { cache } from "react";
 import { cookies } from "next/headers";
 import { getRequestContext } from "@cloudflare/next-on-pages";
+import { GitHub } from "arctic";
 
 let lucia: Lucia<Record<never, never>, Record<never, never>> | undefined;
 
@@ -29,12 +30,26 @@ export const getLucia = (DATABASE_URL: string, DATABASE_AUTH_TOKEN: string) => {
     },
     getUserAttributes: (attributes) => {
       return {
-        username: attributes.username,
+        email: attributes.email,
+        githubId: attributes.githubId,
       };
     },
   });
 
   return lucia;
+};
+
+let github: GitHub | undefined;
+
+export const getGitHub = (
+  GITHUB_CLIENT_ID: string,
+  GITHUB_CLIENT_SECRET: string
+) => {
+  if (github) {
+    return github;
+  }
+  github = new GitHub(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET);
+  return github;
 };
 
 export const validateRequest = cache(

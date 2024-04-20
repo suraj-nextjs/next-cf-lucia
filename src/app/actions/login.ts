@@ -20,7 +20,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     return { error: "Invalid fields!" };
   }
 
-  const { email: username, password } = validatedFields.data;
+  const { email, password } = validatedFields.data;
 
   const db = getDb(
     getRequestContext().env.DATABASE_URL,
@@ -33,20 +33,20 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
   );
 
   const existingUser = (
-    await db.select().from(userTable).where(eq(userTable.username, username))
+    await db.select().from(userTable).where(eq(userTable.email, email))
   )?.[0];
 
   if (!existingUser) {
     return {
-      error: "Incorrect username or password",
+      error: "Incorrect email or password",
     };
   }
 
-  const validPassword = pbkdf2Verify(existingUser.password, password);
+  const validPassword = pbkdf2Verify(existingUser?.password ?? "", password);
 
   if (!validPassword) {
     return {
-      error: "Incorrect username or password",
+      error: "Incorrect email or password",
     };
   }
 
