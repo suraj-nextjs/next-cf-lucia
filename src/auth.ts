@@ -7,6 +7,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { getRequestContext } from "@cloudflare/next-on-pages";
 import { GitHub } from "arctic";
+import { Resend } from "resend";
 
 let lucia: Lucia<Record<never, never>, Record<never, never>> | undefined;
 
@@ -92,6 +93,17 @@ export const validateRequest = cache(
     return result;
   }
 );
+
+let resend: Resend | undefined;
+
+export const getResend = (RESEND_API_KEY: string) => {
+  if (resend) {
+    return resend;
+  }
+
+  resend = new Resend(RESEND_API_KEY);
+  return resend;
+};
 
 // IMPORTANT!
 declare module "lucia" {
